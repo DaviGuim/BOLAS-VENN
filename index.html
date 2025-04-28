@@ -2,7 +2,7 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Venn Game - Aprendizado Interativo</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
@@ -22,6 +22,7 @@
             box-sizing: border-box;
             margin: 0;
             padding: 0;
+            -webkit-tap-highlight-color: transparent;
         }
         
         body {
@@ -29,66 +30,70 @@
             background-color: #f5f7fa;
             color: var(--dark);
             line-height: 1.6;
-            padding: 20px;
+            padding: 10px;
+            touch-action: manipulation;
         }
         
         .container {
-            max-width: 1200px;
+            max-width: 100%;
             margin: 0 auto;
-            padding: 20px;
+            padding: 10px;
         }
         
         header {
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 15px;
         }
         
         h1 {
             color: var(--primary);
-            font-size: 2.5rem;
-            margin-bottom: 10px;
+            font-size: 1.8rem;
+            margin-bottom: 5px;
             font-weight: 700;
         }
         
         .subtitle {
             color: var(--gray);
-            font-size: 1.1rem;
-            margin-bottom: 20px;
+            font-size: 0.9rem;
+            margin-bottom: 15px;
         }
         
         .game-container {
-            display: grid;
-            grid-template-columns: 1fr 300px;
-            gap: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
         }
         
         .game-board {
             background-color: var(--white);
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            padding: 15px;
+            order: 2;
         }
         
         .phase-info {
             background: linear-gradient(135deg, var(--primary), var(--accent));
             color: var(--white);
-            padding: 15px 25px;
-            border-radius: 10px;
-            margin-bottom: 20px;
+            padding: 10px 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
             font-weight: 600;
             text-align: center;
-            box-shadow: 0 4px 15px rgba(67, 97, 238, 0.3);
+            box-shadow: 0 3px 10px rgba(67, 97, 238, 0.3);
+            font-size: 0.9rem;
         }
         
         .venn-container {
             position: relative;
             width: 100%;
-            height: 400px;
-            margin: 20px auto;
+            height: 300px;
+            margin: 15px auto;
             background-color: var(--white);
-            border-radius: 10px;
+            border-radius: 8px;
             overflow: hidden;
             border: 2px dashed rgba(67, 97, 238, 0.2);
+            touch-action: none;
         }
         
         .circle {
@@ -101,33 +106,35 @@
             align-items: center;
             color: var(--white);
             font-weight: 600;
-            font-size: 18px;
+            font-size: 14px;
             text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
             transition: all 0.3s ease;
+            text-align: center;
+            padding: 0 5px;
         }
         
         #circleA {
-            width: 250px;
-            height: 250px;
+            width: 180px;
+            height: 180px;
             background-color: rgba(241, 90, 34, 0.7);
-            top: 75px;
-            left: 100px;
+            top: 60px;
+            left: 30px;
         }
         
         #circleB {
-            width: 250px;
-            height: 250px;
+            width: 180px;
+            height: 180px;
             background-color: rgba(67, 97, 238, 0.7);
-            top: 75px;
-            left: 250px;
+            top: 60px;
+            left: 120px;
         }
         
         .item {
             position: absolute;
-            width: 60px;
-            height: 60px;
-            border-radius: 15px;
-            cursor: grab;
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            cursor: pointer;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -136,39 +143,43 @@
             user-select: none;
             background-size: cover;
             background-position: center;
-            transition: all 0.3s ease;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.2s ease;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
             border: 2px solid var(--white);
-            font-size: 0; /* Esconde o texto inicialmente */
+            font-size: 0;
             z-index: 10;
+            touch-action: none;
         }
         
-        .item:hover {
+        .item.active {
             transform: scale(1.1) rotate(5deg);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
-            font-size: 12px; /* Mostra texto no hover */
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            font-size: 10px;
             z-index: 100;
         }
         
         .controls {
             display: flex;
-            gap: 15px;
-            margin: 25px 0;
+            gap: 10px;
+            margin: 15px 0;
             flex-wrap: wrap;
             justify-content: center;
         }
         
         button {
-            padding: 12px 25px;
+            padding: 10px 15px;
             border: none;
-            border-radius: 50px;
+            border-radius: 25px;
             cursor: pointer;
             font-weight: 600;
-            transition: all 0.3s ease;
+            transition: all 0.2s ease;
             display: flex;
             align-items: center;
-            gap: 8px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            gap: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            font-size: 0.9rem;
+            min-width: 100px;
+            justify-content: center;
         }
         
         .btn-primary {
@@ -176,10 +187,10 @@
             color: var(--white);
         }
         
-        .btn-primary:hover {
+        .btn-primary:active {
             background-color: var(--secondary);
-            transform: translateY(-3px);
-            box-shadow: 0 6px 15px rgba(67, 97, 238, 0.3);
+            transform: translateY(1px);
+            box-shadow: 0 3px 8px rgba(67, 97, 238, 0.3);
         }
         
         .btn-secondary {
@@ -187,9 +198,9 @@
             color: var(--dark);
         }
         
-        .btn-secondary:hover {
+        .btn-secondary:active {
             background-color: #e9ecef;
-            transform: translateY(-3px);
+            transform: translateY(1px);
         }
         
         button:disabled {
@@ -202,33 +213,34 @@
         .progress-container {
             width: 100%;
             background-color: #e9ecef;
-            border-radius: 50px;
-            margin: 20px 0;
+            border-radius: 25px;
+            margin: 15px 0;
             overflow: hidden;
-            height: 20px;
+            height: 15px;
         }
         
         .progress-bar {
             height: 100%;
             background: linear-gradient(90deg, var(--accent), var(--success));
             width: 0%;
-            transition: width 0.5s ease;
+            transition: width 0.3s ease;
             display: flex;
             align-items: center;
             justify-content: center;
             color: var(--white);
-            font-size: 12px;
+            font-size: 10px;
             font-weight: 600;
         }
         
         .feedback {
-            margin: 20px 0;
-            padding: 15px;
-            border-radius: 10px;
+            margin: 15px 0;
+            padding: 10px;
+            border-radius: 8px;
             text-align: center;
             font-weight: 600;
             opacity: 0;
-            transition: opacity 0.5s ease;
+            transition: opacity 0.3s ease;
+            font-size: 0.9rem;
         }
         
         .correct {
@@ -245,33 +257,34 @@
         
         .sidebar {
             background-color: var(--white);
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-            padding: 25px;
-            height: fit-content;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            padding: 15px;
+            order: 1;
         }
         
         .sidebar-title {
-            font-size: 1.3rem;
+            font-size: 1.1rem;
             color: var(--primary);
-            margin-bottom: 20px;
-            padding-bottom: 10px;
+            margin-bottom: 15px;
+            padding-bottom: 8px;
             border-bottom: 2px solid #eee;
             font-weight: 600;
         }
         
         .leaderboard {
             list-style: none;
-            margin-top: 20px;
+            margin-top: 15px;
+            font-size: 0.9rem;
         }
         
         .leaderboard li {
             display: flex;
             justify-content: space-between;
-            padding: 12px 15px;
-            margin-bottom: 10px;
+            padding: 8px 10px;
+            margin-bottom: 8px;
             background-color: var(--light);
-            border-radius: 8px;
+            border-radius: 6px;
             font-weight: 500;
         }
         
@@ -304,22 +317,23 @@
             z-index: 1000;
             justify-content: center;
             align-items: center;
+            padding: 15px;
         }
         
         .modal-content {
             background-color: var(--white);
-            padding: 30px;
-            border-radius: 15px;
-            width: 90%;
-            max-width: 500px;
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
-            animation: modalFadeIn 0.4s ease;
+            padding: 20px;
+            border-radius: 10px;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            animation: modalFadeIn 0.3s ease;
         }
         
         @keyframes modalFadeIn {
             from {
                 opacity: 0;
-                transform: translateY(-20px);
+                transform: translateY(-10px);
             }
             to {
                 opacity: 1;
@@ -328,29 +342,31 @@
         }
         
         .modal-title {
-            font-size: 1.5rem;
+            font-size: 1.3rem;
             color: var(--primary);
-            margin-bottom: 20px;
+            margin-bottom: 15px;
             text-align: center;
         }
         
         .form-group {
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
         
         .form-group label {
             display: block;
-            margin-bottom: 8px;
+            margin-bottom: 5px;
             font-weight: 500;
+            font-size: 0.9rem;
         }
         
         .form-group input {
             width: 100%;
-            padding: 12px 15px;
+            padding: 10px 12px;
             border: 1px solid #ddd;
-            border-radius: 8px;
+            border-radius: 6px;
             font-family: 'Poppins', sans-serif;
-            transition: border 0.3s ease;
+            transition: border 0.2s ease;
+            font-size: 0.9rem;
         }
         
         .form-group input:focus {
@@ -361,17 +377,17 @@
         .modal-actions {
             display: flex;
             justify-content: flex-end;
-            gap: 15px;
-            margin-top: 25px;
+            gap: 10px;
+            margin-top: 20px;
         }
         
         .badge {
             display: inline-block;
-            padding: 3px 8px;
+            padding: 2px 6px;
             border-radius: 50px;
-            font-size: 0.8rem;
+            font-size: 0.7rem;
             font-weight: 600;
-            margin-left: 8px;
+            margin-left: 5px;
         }
         
         .badge-primary {
@@ -380,29 +396,50 @@
         }
         
         .timer {
-            font-size: 1.1rem;
+            font-size: 0.9rem;
             font-weight: 600;
             color: var(--primary);
             margin-left: auto;
             display: flex;
             align-items: center;
-            gap: 5px;
+            gap: 3px;
         }
         
         .game-header {
             display: flex;
             align-items: center;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
         
-        @media (max-width: 992px) {
+        @media (min-width: 768px) {
             .game-container {
-                grid-template-columns: 1fr;
+                flex-direction: row;
+            }
+            
+            .game-board {
+                flex: 1;
             }
             
             .sidebar {
-                order: -1;
-                margin-bottom: 30px;
+                width: 280px;
+                margin-right: 15px;
+            }
+            
+            .venn-container {
+                height: 400px;
+            }
+            
+            #circleA, #circleB {
+                width: 220px;
+                height: 220px;
+            }
+            
+            #circleA {
+                left: 50px;
+            }
+            
+            #circleB {
+                left: 170px;
             }
         }
     </style>
@@ -434,21 +471,21 @@
                 
                 <div class="controls">
                     <button class="btn-primary" id="checkBtn">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
                             <polyline points="22 4 12 14.01 9 11.01"></polyline>
                         </svg>
                         Verificar
                     </button>
                     <button class="btn-primary" id="nextPhaseBtn" disabled>
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <polyline points="13 17 18 12 13 7"></polyline>
                             <polyline points="6 17 11 12 6 7"></polyline>
                         </svg>
-                        Próxima Fase
+                        Próxima
                     </button>
                     <button class="btn-secondary" id="resetBtn">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <polyline points="23 4 23 10 17 10"></polyline>
                             <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path>
                         </svg>
@@ -463,8 +500,8 @@
                     <li>Nenhum jogador ainda</li>
                 </ul>
                 
-                <h2 class="sidebar-title" style="margin-top: 30px;">Como Jogar</h2>
-                <ol style="padding-left: 20px;">
+                <h2 class="sidebar-title" style="margin-top: 20px;">Como Jogar</h2>
+                <ol style="padding-left: 20px; font-size: 0.9rem;">
                     <li>Arraste os itens para os círculos corretos</li>
                     <li>Itens que pertencem a ambos vão na interseção</li>
                     <li>Clique em "Verificar" para conferir</li>
@@ -478,7 +515,7 @@
     <div class="modal" id="nameModal">
         <div class="modal-content">
             <h2 class="modal-title">Parabéns!</h2>
-            <p>Você completou todas as fases com sucesso! Digite seu nome para entrar no ranking:</p>
+            <p style="font-size: 0.9rem; margin-bottom: 15px;">Você completou todas as fases com sucesso! Digite seu nome para entrar no ranking:</p>
             
             <div class="form-group">
                 <label for="playerName">Seu Nome:</label>
@@ -551,57 +588,47 @@
                     ]
                 },
                 {
-                title: "Fase 4: Países",
-                circleA: "América do Sul",
-                circleB: "Europa",
-                items: [
-                { name: "Brasil", image: "brasil.jpg", correctA: true, correctB: false },
-                { name: "França", image: "frança.jpg", correctA: false, correctB: true },
-                { name: "Argentina", image: "argentina.jpg", correctA: true, correctB: false },
-                { name: "Espanha", image: "espanha.jpg", correctA: false, correctB: true },
-                { name: "Guiana Francesa", image: "guiana.jpg", correctA: true, correctB: true }
-                ]
-                 },
-                 {
-        title: "Fase 5: Jogos",
-        circleA: "PC",
-        circleB: "Mobile",
-        items: [
-            { name: "Doom", image: "doom.jpg", correctA: true, correctB: false },
-            { name: "Clash Royale", image: "clashroyale.jpg", correctA: false, correctB: true },
-            { name: "Far Cry", image: "farcry.jpg", correctA: true, correctB: false },
-            { name: "Brawl Stars", image: "brawlstars.jpg", correctA: false, correctB: true },
-            { name: "Minecraft", image: "minecraft.jpg", correctA: true, correctB: true }
-        ]
-    },
-    {
-        title: "Fase 6: Esportes",
-        circleA: "Coletivos",
-        circleB: "Aquáticos",
-        items: [
-            { name: "Futebol", image: "futebol.jpg", correctA: true, correctB: false },
-            { name: "Natação", image: "nataçao.jpg", correctA: false, correctB: true },
-            { name: "Vôlei", image: "volei.jpg", correctA: true, correctB: false },
-            { name: "Polo Aquático", image: "poloaquatico.jpg", correctA: true, correctB: true },
-            { name: "Surfe", image: "surfe.jpg", correctA: false, correctB: true }
-        ]
-    }
-                
-
-
-
-
-
-
-
-
-
+                    title: "Fase 4: Países",
+                    circleA: "América do Sul",
+                    circleB: "Europa",
+                    items: [
+                        { name: "Brasil", image: "brasil.jpg", correctA: true, correctB: false },
+                        { name: "França", image: "frança.jpg", correctA: false, correctB: true },
+                        { name: "Argentina", image: "argentina.jpg", correctA: true, correctB: false },
+                        { name: "Espanha", image: "espanha.jpg", correctA: false, correctB: true },
+                        { name: "Guiana Francesa", image: "guiana.jpg", correctA: true, correctB: true }
+                    ]
+                },
+                {
+                    title: "Fase 5: Jogos",
+                    circleA: "PC",
+                    circleB: "Mobile",
+                    items: [
+                        { name: "Doom", image: "doom.jpg", correctA: true, correctB: false },
+                        { name: "Clash Royale", image: "clashroyale.jpg", correctA: false, correctB: true },
+                        { name: "Far Cry", image: "farcry.jpg", correctA: true, correctB: false },
+                        { name: "Brawl Stars", image: "brawlstars.jpg", correctA: false, correctB: true },
+                        { name: "Minecraft", image: "minecraft.jpg", correctA: true, correctB: true }
+                    ]
+                },
+                {
+                    title: "Fase 6: Esportes",
+                    circleA: "Coletivos",
+                    circleB: "Aquáticos",
+                    items: [
+                        { name: "Futebol", image: "futebol.jpg", correctA: true, correctB: false },
+                        { name: "Natação", image: "nataçao.jpg", correctA: false, correctB: true },
+                        { name: "Vôlei", image: "volei.jpg", correctA: true, correctB: false },
+                        { name: "Polo Aquático", image: "poloaquatico.jpg", correctA: true, correctB: true },
+                        { name: "Surfe", image: "surfe.jpg", correctA: false, correctB: true }
+                    ]
+                }
             ];
             
             // Variáveis do jogo
             let currentPhase = 0;
             let draggedItem = null;
-            let offsetX, offsetY;
+            let startX, startY, initialX, initialY;
             let items = [];
             let startTime = 0;
             let timerInterval = null;
@@ -646,16 +673,22 @@
                     item.dataset.placedB = "false";
                     
                     // Posição inicial aleatória fora dos círculos
-                    const maxX = vennContainer.offsetWidth - 60;
-                    const maxY = vennContainer.offsetHeight - 60;
-                    const randomX = Math.floor(Math.random() * (maxX - 100)) + 50;
-                    const randomY = Math.floor(Math.random() * (maxY - 100)) + 50;
+                    const maxX = vennContainer.offsetWidth - 50;
+                    const maxY = vennContainer.offsetHeight - 50;
+                    const randomX = Math.floor(Math.random() * (maxX - 80)) + 30;
+                    const randomY = Math.floor(Math.random() * (maxY - 80)) + 30;
                     
                     item.style.left = randomX + 'px';
                     item.style.top = randomY + 'px';
                     
                     // Adicionar eventos de arrasto
-                    item.addEventListener('mousedown', startDrag);
+                    item.addEventListener('touchstart', handleTouchStart, { passive: false });
+                    item.addEventListener('mousedown', handleMouseStart);
+                    
+                    // Adicionar evento de toque para mostrar nome
+                    item.addEventListener('click', function() {
+                        this.classList.toggle('active');
+                    });
                     
                     vennContainer.appendChild(item);
                     items.push(item);
@@ -668,58 +701,92 @@
                 nextPhaseBtn.disabled = true;
             }
             
-            // Iniciar arrasto
-            function startDrag(e) {
+            // Iniciar arrasto com mouse
+            function handleMouseStart(e) {
+                e.preventDefault();
                 draggedItem = this;
                 
-                // Calcular a diferença entre o clique e o canto superior esquerdo do item
                 const rect = draggedItem.getBoundingClientRect();
-                offsetX = e.clientX - rect.left;
-                offsetY = e.clientY - rect.top;
+                initialX = e.clientX - rect.left;
+                initialY = e.clientY - rect.top;
                 
-                // Mudar o cursor e adicionar eventos
-                document.body.style.cursor = 'grabbing';
-                document.addEventListener('mousemove', dragItem);
-                document.addEventListener('mouseup', stopDrag);
+                document.addEventListener('mousemove', handleMouseMove);
+                document.addEventListener('mouseup', handleMouseEnd);
                 
-                // Trazer o item para frente
                 draggedItem.style.zIndex = 1000;
-                
-                e.preventDefault();
             }
             
-            // Arrastar item
-            function dragItem(e) {
+            // Mover com mouse
+            function handleMouseMove(e) {
                 if (!draggedItem) return;
                 
-                // Calcular nova posição
                 const containerRect = vennContainer.getBoundingClientRect();
-                let newLeft = e.clientX - containerRect.left - offsetX;
-                let newTop = e.clientY - containerRect.top - offsetY;
+                let newLeft = e.clientX - containerRect.left - initialX;
+                let newTop = e.clientY - containerRect.top - initialY;
                 
-                // Limitar ao contêiner
                 newLeft = Math.max(0, Math.min(newLeft, containerRect.width - draggedItem.offsetWidth));
                 newTop = Math.max(0, Math.min(newTop, containerRect.height - draggedItem.offsetHeight));
                 
-                // Aplicar nova posição
                 draggedItem.style.left = newLeft + 'px';
                 draggedItem.style.top = newTop + 'px';
                 
-                // Atualizar a posição lógica do item
                 updateItemPosition(draggedItem);
             }
             
-            // Parar arrasto
-            function stopDrag() {
+            // Finalizar arrasto com mouse
+            function handleMouseEnd() {
                 if (!draggedItem) return;
                 
-                document.body.style.cursor = '';
-                document.removeEventListener('mousemove', dragItem);
-                document.removeEventListener('mouseup', stopDrag);
+                document.removeEventListener('mousemove', handleMouseMove);
+                document.removeEventListener('mouseup', handleMouseEnd);
                 
-                // Resetar z-index
                 draggedItem.style.zIndex = '';
+                draggedItem = null;
+            }
+            
+            // Iniciar arrasto com touch
+            function handleTouchStart(e) {
+                e.preventDefault();
+                draggedItem = this;
                 
+                const touch = e.touches[0];
+                const rect = draggedItem.getBoundingClientRect();
+                initialX = touch.clientX - rect.left;
+                initialY = touch.clientY - rect.top;
+                
+                document.addEventListener('touchmove', handleTouchMove, { passive: false });
+                document.addEventListener('touchend', handleTouchEnd);
+                
+                draggedItem.style.zIndex = 1000;
+            }
+            
+            // Mover com touch
+            function handleTouchMove(e) {
+                if (!draggedItem) return;
+                e.preventDefault();
+                
+                const touch = e.touches[0];
+                const containerRect = vennContainer.getBoundingClientRect();
+                let newLeft = touch.clientX - containerRect.left - initialX;
+                let newTop = touch.clientY - containerRect.top - initialY;
+                
+                newLeft = Math.max(0, Math.min(newLeft, containerRect.width - draggedItem.offsetWidth));
+                newTop = Math.max(0, Math.min(newTop, containerRect.height - draggedItem.offsetHeight));
+                
+                draggedItem.style.left = newLeft + 'px';
+                draggedItem.style.top = newTop + 'px';
+                
+                updateItemPosition(draggedItem);
+            }
+            
+            // Finalizar arrasto com touch
+            function handleTouchEnd() {
+                if (!draggedItem) return;
+                
+                document.removeEventListener('touchmove', handleTouchMove);
+                document.removeEventListener('touchend', handleTouchEnd);
+                
+                draggedItem.style.zIndex = '';
                 draggedItem = null;
             }
             
@@ -764,6 +831,8 @@
                 let correctCount = 0;
                 
                 items.forEach(item => {
+                    item.classList.remove('active');
+                    
                     const correctA = item.dataset.correctA === "true";
                     const correctB = item.dataset.correctB === "true";
                     const placedA = item.dataset.placedA === "true";
