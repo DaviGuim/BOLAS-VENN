@@ -265,7 +265,7 @@
         
         .sidebar-title {
             font-size: 1.1rem;
-            color: var(--primary);
+            color: #4361ee;
             margin-bottom: 15px;
             padding-bottom: 8px;
             border-bottom: 2px solid #eee;
@@ -410,6 +410,22 @@
             align-items: center;
             margin-bottom: 15px;
         }
+        .feedback-btn {
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            color: var(--white);
+            border: none;
+            padding: 10px 15px;
+            border-radius: 25px;
+            font-weight: 600;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 3px 10px rgba(67, 97, 238, 0.3);
+            transition: all 0.2s ease;
+            margin-top: 20px;
+            text-decoration: none;
+            display: block;
+            cursor: pointer;
+        }
         
         @media (min-width: 768px) {
             .game-container {
@@ -441,19 +457,9 @@
             #circleB {
                 left: 170px;
             }
-            #form-link {
-            position: absolute;
-            bottom: 10px;
-            right: 10px;
-            background: #2196F3;
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 5px;
-            text-decoration: none;
-            font-size: 14px;
+            
     }
-        }
+        
     </style>
 </head>
 <body>
@@ -512,7 +518,7 @@
                     <li>Nenhum jogador ainda</li>
                 </ul>
                 
-                <h2 class="sidebar-title" style="margin-top: 20px;">Como Jogar</h2>
+                <button class="feedback-btn" onclick="window.open('https:forms.gle/mKLk6BJb2aWG7YdH9', '_blank')">Avalie nosso jogo</button>
                 <ol style="padding-left: 20px; font-size: 0.9rem;">
                     <li>Arraste os itens para os círculos corretos</li>
                     <li>Itens que pertencem a ambos vão na interseção</li>
@@ -524,8 +530,7 @@
         </div>
     </div>
     <div>
-       <a href="https://forms.gle/mKLk6BJb2aWG7YdH9" id="form-link" target="_blank">Avalie nosso jogo</a>
-
+       
     </div>
     
     <div class="modal" id="nameModal">
